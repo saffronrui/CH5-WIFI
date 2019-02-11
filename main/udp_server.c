@@ -141,7 +141,7 @@ static void rs422_to_udp_task(void *pvParameters)
  //                  	 break;
                 	}
 		       }
-        vTaskDelay(100/ portTICK_RATE_MS);
+        vTaskDelay(50/ portTICK_RATE_MS);
         }
 
     vTaskDelete(NULL);
