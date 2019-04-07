@@ -4,22 +4,3 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-BUF_SIZE	udp_server.c	43;"	d	file:
-ECHO_TEST_CTS	udp_server.c	42;"	d	file:
-ECHO_TEST_RTS	udp_server.c	41;"	d	file:
-ECHO_TEST_RXD	udp_server.c	40;"	d	file:
-ECHO_TEST_TXD	udp_server.c	39;"	d	file:
-EXAMPLE_ESP_WIFI_PASS	udp_server.c	34;"	d	file:
-EXAMPLE_ESP_WIFI_SSID	udp_server.c	33;"	d	file:
-EXAMPLE_MAX_STA_CONN	udp_server.c	35;"	d	file:
-IPV4_GOTIP_BIT	udp_server.c	/^const int IPV4_GOTIP_BIT = BIT0;$/;"	v
-IPV6_GOTIP_BIT	udp_server.c	/^const int IPV6_GOTIP_BIT = BIT1;$/;"	v
-PORT	udp_server.c	37;"	d	file:
-TAG	udp_server.c	/^static const char *TAG = "This is a test program for udp_server";$/;"	v	file:
-app_main	udp_server.c	/^void app_main()$/;"	f
-event_handler	udp_server.c	/^static esp_err_t event_handler(void *ctx, system_event_t *event)$/;"	f	file:
-init_uart	udp_server.c	/^void init_uart()		\/\/ uart init function$/;"	f
-udp_server_task	udp_server.c	/^static void udp_server_task(void *pvParameters)$/;"	f	file:
-wait_for_ip	udp_server.c	/^static void wait_for_ip()$/;"	f	file:
-wifi_event_group	udp_server.c	/^static EventGroupHandle_t wifi_event_group;$/;"	v	file:
-wifi_init_softap	udp_server.c	/^void wifi_init_softap()$/;"	f

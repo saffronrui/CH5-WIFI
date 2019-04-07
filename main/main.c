@@ -32,6 +32,8 @@ Function:
 
 #define	ECHO_TEST_TXD	(GPIO_NUM_10)
 #define ECHO_TEST_RXD	(GPIO_NUM_9)
+//#define	ECHO_TEST_TXD	(GPIO_NUM_17)
+//#define ECHO_TEST_RXD	(GPIO_NUM_16)
 #define	ECHO_TEST_RTS	(UART_PIN_NO_CHANGE)
 #define	ECHO_TEST_CTS	(UART_PIN_NO_CHANGE)
 #define	BUF_SIZE (1024)
@@ -39,7 +41,7 @@ Function:
 
 /* FreeRTOS event group to signal when we are connected & ready to make a request */
 static EventGroupHandle_t wifi_event_group;
-/* FreeRTOS event group to signal when we are connected*/
+/* FreeRTOS event group /to signal when we are connected*/
 //static EventGroupHandle_t s_wifi_event_group;
 
 const int IPV4_GOTIP_BIT = BIT0;
@@ -80,20 +82,18 @@ void wifi_init_softap()
 {
     wifi_event_group = xEventGroupCreate();
 
-
-    /* Configure parameters of an UART driver,
-     * communication pins and install the driver */
-    uart_config_t uart_config = {
-        .baud_rate = 115200,
-        .data_bits = UART_DATA_8_BITS,
-        .parity    = UART_PARITY_DISABLE,
-        .stop_bits = UART_STOP_BITS_1,
-        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE
-    };
-    uart_param_config(UART_NUM_1, &uart_config);
-    uart_set_pin(UART_NUM_1, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS);
-    uart_driver_install(UART_NUM_1, BUF_SIZE * 2, 0, 0, NULL, 0);
-
+//    /* Configure parameters of an UART driver,
+//     * communication pins and install the driver */
+//    uart_config_t uart_config = {
+//        .baud_rate = 115200,
+//        .data_bits = UART_DATA_8_BITS,
+//        .parity    = UART_PARITY_DISABLE,
+//        .stop_bits = UART_STOP_BITS_1,
+//        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE
+//    };
+//    uart_param_config(UART_NUM_1, &uart_config);
+//    uart_set_pin(UART_NUM_1, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS);
+//    uart_driver_install(UART_NUM_1, BUF_SIZE * 2, 0, 0, NULL, 0);
 
     tcpip_adapter_init();
     ESP_ERROR_CHECK(esp_event_loop_init(event_handler, NULL));
@@ -176,6 +176,8 @@ static void udp_to_rs422_task(void *pvParameters)
                 uart_write_bytes(UART_NUM_1, (const char *) rx_buffer, len);
             }
 
+//        vTaskDelay(200/ portTICK_RATE_MS);
+       
         }
     vTaskDelete(NULL);
 }
@@ -194,7 +196,6 @@ void init_uart()		// uart init function
     uart_param_config(UART_NUM_1, &uart_config);
     uart_set_pin(UART_NUM_1, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS);
     uart_driver_install(UART_NUM_1, BUF_SIZE * 2, 0, 0, NULL, 0);
-
 }
 
 void socket_connect(void)
