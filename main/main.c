@@ -176,7 +176,7 @@ static void udp_to_rs422_task(void *pvParameters)
                 uart_write_bytes(UART_NUM_1, (const char *) rx_buffer, len);
             }
 
-//        vTaskDelay(200/ portTICK_RATE_MS);
+        vTaskDelay(50/ portTICK_RATE_MS);
        
         }
     vTaskDelete(NULL);
