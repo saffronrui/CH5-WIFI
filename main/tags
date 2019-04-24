@@ -4,3 +4,31 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BUF_SIZE	main.c	39;"	d	file:
+ECHO_TEST_CTS	main.c	38;"	d	file:
+ECHO_TEST_RTS	main.c	37;"	d	file:
+ECHO_TEST_RXD	main.c	34;"	d	file:
+ECHO_TEST_TXD	main.c	33;"	d	file:
+EXAMPLE_ESP_WIFI_PASS	main.c	28;"	d	file:
+EXAMPLE_ESP_WIFI_SSID	main.c	27;"	d	file:
+EXAMPLE_MAX_STA_CONN	main.c	29;"	d	file:
+IPV4_GOTIP_BIT	main.c	/^const int IPV4_GOTIP_BIT = BIT0;$/;"	v
+IPV6_GOTIP_BIT	main.c	/^const int IPV6_GOTIP_BIT = BIT1;$/;"	v
+PORT	main.c	31;"	d	file:
+TAG	main.c	/^static const char *TAG = "CH5-WIFI-PROGRAM";$/;"	v	file:
+addr_family	main.c	/^int addr_family;$/;"	v
+addr_str	main.c	/^char addr_str[128];$/;"	v
+app_main	main.c	/^void app_main()$/;"	f
+destAddr	main.c	/^struct sockaddr_in destAddr;$/;"	v	typeref:struct:sockaddr_in
+event_handler	main.c	/^static esp_err_t event_handler(void *ctx, system_event_t *event)$/;"	f	file:
+init_uart	main.c	/^void init_uart()		\/\/ uart init function$/;"	f
+ip_protocol	main.c	/^int ip_protocol;$/;"	v
+rs422_to_udp_task	main.c	/^static void rs422_to_udp_task(void *pvParameters)$/;"	f	file:
+rx_buffer	main.c	/^char rx_buffer[128];$/;"	v
+sock	main.c	/^int sock ;$/;"	v
+socket_connect	main.c	/^void socket_connect(void)$/;"	f
+socklen	main.c	/^socklen_t socklen;$/;"	v
+sourceAddr	main.c	/^struct sockaddr_in sourceAddr;$/;"	v	typeref:struct:sockaddr_in
+udp_to_rs422_task	main.c	/^static void udp_to_rs422_task(void *pvParameters)$/;"	f	file:
+wifi_event_group	main.c	/^static EventGroupHandle_t wifi_event_group;$/;"	v	file:
+wifi_init_softap	main.c	/^void wifi_init_softap()$/;"	f
