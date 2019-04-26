@@ -48,23 +48,27 @@ const int IPV4_GOTIP_BIT = BIT0;
 const int IPV6_GOTIP_BIT = BIT1;
 
 struct sockaddr_in sourceAddr;
-struct sockaddr_in Dev1Addr;
-struct sockaddr_in Dev2Addr;
-struct sockaddr_in Dev3Addr;
-struct sockaddr_in destAddr;
-char rx_buffer[128];
-char addr_str[128];
-char sourceaddr_str[128];
-char Dev1Addr_str[128];
-char Dev2Addr_str[128];
-char Dev3Addr_str[128];
-int addr_family;
-int ip_protocol;
 socklen_t socklen;
-socklen_t dev1_socklen;
-socklen_t dev2_socklen;
-socklen_t dev3_socklen;
 int sock ;
+int ip_protocol;
+int addr_family;
+
+struct      sockaddr_in Dev1Addr;       //Address for Transprant COM
+char        Dev1Addr_str[128];
+socklen_t   dev1_socklen;
+
+struct      sockaddr_in Dev2Addr;       //Address for FUEL system
+char        Dev2Addr_str[128];
+socklen_t   dev2_socklen;
+
+struct      sockaddr_in Dev3Addr;       //Address for GEAR system
+char        Dev3Addr_str[128];
+socklen_t   dev3_socklen;
+
+struct      sockaddr_in destAddr;       //Address for UDP server
+char        rx_buffer[128];
+char        addr_str[128];
+char        sourceaddr_str[128];
 
 void socket_connect(void);
 
@@ -123,19 +127,13 @@ static void rs422_to_udp_task(void *pvParameters)
 {
     uint8_t *data = (uint8_t *) malloc(BUF_SIZE);
 
-    char data1[10] = "123456789";
-
         while (1) {
 
-        int len1 = 10; 
-        int err = sendto(sock, data1, len1, 0, (struct sockaddr *)&Dev1Addr, sizeof(Dev1Addr));
-         err = sendto(sock, data1, len1, 0, (struct sockaddr *)&Dev2Addr, sizeof(Dev2Addr));
-         err = sendto(sock, data1, len1, 0, (struct sockaddr *)&Dev3Addr, sizeof(Dev3Addr));
-    	
         int rs422_len = uart_read_bytes(UART_NUM_1, data, BUF_SIZE, 20 / portTICK_RATE_MS);
 	    if(rs422_len > 0){
 
-                	 int err = sendto(sock, data, rs422_len, 0, (struct sockaddr *)&sourceAddr, sizeof(sourceAddr));
+                     int err = sendto(sock, data, rs422_len, 0, (struct sockaddr *)&Dev1Addr, sizeof(Dev1Addr));   // Transprant COM
+                     
                      if (err < 0) {
                     	 ESP_LOGE(TAG, "Error occured during sending: errno %d", errno);
                     	 ESP_LOGE(TAG, "Shutting down socket and restarting...");
@@ -145,7 +143,7 @@ static void rs422_to_udp_task(void *pvParameters)
  //                  	 break;
                 	}
 		       }
-        vTaskDelay(1000/ portTICK_RATE_MS);
+        vTaskDelay(50/ portTICK_RATE_MS);
         }
 
     vTaskDelete(NULL);
@@ -162,7 +160,6 @@ static void udp_to_rs422_task(void *pvParameters)
 
         ESP_LOGI(TAG, "Waiting for data");
 
-//	    int len = recvfrom(sock, rx_buffer, sizeof(rx_buffer) - 1, 0, (struct sockaddr *)&sourceAddr, &socklen);
 	    int len = recvfrom(sock, rx_buffer, sizeof(rx_buffer) - 1, 0, (struct sockaddr *)&DevAddr, &socklen);
 
 	    // Error occured during receiving
@@ -211,6 +208,8 @@ void init_uart()		// uart init function
 
 void socket_connect(void)
 {
+    ///*************** Transparent Transform Channel********///
+    ///***  For FCC or ElE program ******************///
     Dev1Addr.sin_addr.s_addr = inet_addr("192.168.4.2");
     Dev1Addr.sin_family = AF_INET;
     Dev1Addr.sin_port = htons(4001);
@@ -218,7 +217,9 @@ void socket_connect(void)
     ip_protocol = IPPROTO_IP;
     inet_ntoa_r(Dev1Addr.sin_addr, Dev1Addr_str, sizeof(Dev1Addr_str) - 1);
     dev1_socklen = sizeof(Dev1Addr);
-
+    
+    ///************* Config IP and port for GEAR SYSTEM **********///
+    ///***  Choose data for GEAR software needed //////
     Dev2Addr.sin_addr.s_addr = inet_addr("192.168.4.3");
     Dev2Addr.sin_family = AF_INET;
     Dev2Addr.sin_port = htons(4001);
@@ -227,6 +228,8 @@ void socket_connect(void)
     inet_ntoa_r(Dev2Addr.sin_addr, Dev2Addr_str, sizeof(Dev2Addr_str) - 1);
     dev2_socklen = sizeof(Dev2Addr);
 
+    ///************* Config IP and port for FUEL SYSTEM **********///
+    ///***  Choose data for FULE software needed //////
     Dev3Addr.sin_addr.s_addr = inet_addr("192.168.4.4");
     Dev3Addr.sin_family = AF_INET;
     Dev3Addr.sin_port = htons(4001);
@@ -235,14 +238,7 @@ void socket_connect(void)
     inet_ntoa_r(Dev3Addr.sin_addr, Dev3Addr_str, sizeof(Dev3Addr_str) - 1);
     dev3_socklen = sizeof(Dev3Addr);
 
-//    sourceAddr.sin_addr.s_addr = inet_addr("192.168.4.2");
-//    sourceAddr.sin_family = AF_INET;
-//    sourceAddr.sin_port = htons(4001);
-//    addr_family = AF_INET;
-//    ip_protocol = IPPROTO_IP;
-//    inet_ntoa_r(sourceAddr.sin_addr, sourceaddr_str, sizeof(sourceaddr_str) - 1);
-//    socklen = sizeof(sourceAddr);
-    
+    ///************* Config Address and port for server **********///
     destAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     destAddr.sin_family = AF_INET;
     destAddr.sin_port = htons(PORT);
