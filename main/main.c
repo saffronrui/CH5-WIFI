@@ -30,8 +30,10 @@ Function:
 
 #define PORT CONFIG_EXAMPLE_PORT
 
-#define	ECHO_TEST_TXD	(GPIO_NUM_10)
-#define ECHO_TEST_RXD	(GPIO_NUM_9)
+//#define	ECHO_TEST_TXD	(GPIO_NUM_10)
+//#define ECHO_TEST_RXD	(GPIO_NUM_9)
+#define	ECHO_TEST_TXD	(GPIO_NUM_2)
+#define ECHO_TEST_RXD	(GPIO_NUM_15)
 //#define	ECHO_TEST_TXD	(GPIO_NUM_17)
 //#define ECHO_TEST_RXD	(GPIO_NUM_16)
 #define	ECHO_TEST_RTS	(UART_PIN_NO_CHANGE)
@@ -203,7 +205,7 @@ void init_uart()		// uart init function
 
     uart_param_config(UART_NUM_1, &uart_config);
     uart_set_pin(UART_NUM_1, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS);
-    uart_driver_install(UART_NUM_1, BUF_SIZE * 2, 0, 0, NULL, 0);
+    uart_driver_install(UART_NUM_1, BUF_SIZE * 2, BUF_SIZE, 0, NULL, 0);
 }
 
 void socket_connect(void)
