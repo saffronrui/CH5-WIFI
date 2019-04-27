@@ -30,6 +30,9 @@ Function:
 
 #define PORT CONFIG_EXAMPLE_PORT
 
+//#define RS422_COM   UART_NUM_2        // UART2 CAN WORK Normally By Remap Pin to GPIO_NUM_12 and GPIO_NUM_13
+#define RS422_COM   UART_NUM_1
+
 //#define	ECHO_TEST_TXD	(GPIO_NUM_10)
 //#define ECHO_TEST_RXD	(GPIO_NUM_9)
 //#define	ECHO_TEST_TXD	(GPIO_NUM_2)
@@ -131,7 +134,7 @@ static void rs422_to_udp_task(void *pvParameters)
 
         while (1) {
 
-        int rs422_len = uart_read_bytes(UART_NUM_2, data, BUF_SIZE, 20 / portTICK_RATE_MS);
+        int rs422_len = uart_read_bytes(RS422_COM, data, BUF_SIZE, 20 / portTICK_RATE_MS);
 	    if(rs422_len > 0){
 
                      int err = sendto(sock, data, rs422_len, 0, (struct sockaddr *)&Dev1Addr, sizeof(Dev1Addr));   // Transprant COM
@@ -182,7 +185,7 @@ static void udp_to_rs422_task(void *pvParameters)
                 ESP_LOGI(TAG, "Received %d bytes from %s:", len, DevAddr_str);
                 ESP_LOGI(TAG, "%s", rx_buffer);
 
-                uart_write_bytes(UART_NUM_2, (const char *) rx_buffer, len);
+                uart_write_bytes(RS422_COM, (const char *) rx_buffer, len);
             }
 
         vTaskDelay(50/ portTICK_RATE_MS);
@@ -203,9 +206,9 @@ void init_uart()		// uart init function
         .flow_ctrl = UART_HW_FLOWCTRL_DISABLE
     };
 
-    uart_param_config(UART_NUM_2, &uart_config);
-    uart_set_pin(UART_NUM_2, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS);
-    uart_driver_install(UART_NUM_2, BUF_SIZE * 2, BUF_SIZE, 0, NULL, 0);
+    uart_param_config(RS422_COM, &uart_config);
+    uart_set_pin(RS422_COM, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS);
+    uart_driver_install(RS422_COM, BUF_SIZE * 2, BUF_SIZE, 0, NULL, 0);
 }
 
 void socket_connect(void)
