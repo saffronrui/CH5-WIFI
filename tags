@@ -4,7 +4,7 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-BUF_SIZE	main/main.c	39;"	d	file:
+BUF_SIZE	main/main.c	47;"	d	file:
 CONFIG_ADC2_DISABLE_DAC	build/include/sdkconfig.h	117;"	d
 CONFIG_ADC_CAL_EFUSE_TP_ENABLE	build/include/sdkconfig.h	191;"	d
 CONFIG_ADC_CAL_EFUSE_VREF_ENABLE	build/include/sdkconfig.h	236;"	d
@@ -275,17 +275,20 @@ Dev2Addr	main/main.c	/^struct      sockaddr_in Dev2Addr;       \/\/Address for F
 Dev2Addr_str	main/main.c	/^char        Dev2Addr_str[128];$/;"	v
 Dev3Addr	main/main.c	/^struct      sockaddr_in Dev3Addr;       \/\/Address for GEAR system$/;"	v	typeref:struct:sockaddr_in
 Dev3Addr_str	main/main.c	/^char        Dev3Addr_str[128];$/;"	v
-ECHO_TEST_CTS	main/main.c	38;"	d	file:
-ECHO_TEST_RTS	main/main.c	37;"	d	file:
-ECHO_TEST_RXD	main/main.c	34;"	d	file:
-ECHO_TEST_TXD	main/main.c	33;"	d	file:
+ECHO_TEST_CTS	main/main.c	46;"	d	file:
+ECHO_TEST_RTS	main/main.c	45;"	d	file:
+ECHO_TEST_RXD	main/main.c	44;"	d	file:
+ECHO_TEST_TXD	main/main.c	43;"	d	file:
 EXAMPLE_ESP_WIFI_PASS	main/main.c	28;"	d	file:
 EXAMPLE_ESP_WIFI_SSID	main/main.c	27;"	d	file:
 EXAMPLE_MAX_STA_CONN	main/main.c	29;"	d	file:
+GPIO_OUTPUT_IO_0	main/main.c	33;"	d	file:
+GPIO_OUTPUT_PIN_SEL	main/main.c	34;"	d	file:
 IPV4_GOTIP_BIT	main/main.c	/^const int IPV4_GOTIP_BIT = BIT0;$/;"	v
 IPV6_GOTIP_BIT	main/main.c	/^const int IPV6_GOTIP_BIT = BIT1;$/;"	v
 PORT	main/main.c	31;"	d	file:
 PROJECT_NAME	Makefile	/^PROJECT_NAME := udp_server$/;"	m
+RS422_COM	main/main.c	37;"	d	file:
 TAG	main/main.c	/^static const char *TAG = "CH5-WIFI-PROGRAM";$/;"	v	file:
 addr_family	main/main.c	/^int addr_family;$/;"	v
 addr_str	main/main.c	/^char        addr_str[128];$/;"	v
@@ -295,6 +298,8 @@ dev1_socklen	main/main.c	/^socklen_t   dev1_socklen;$/;"	v
 dev2_socklen	main/main.c	/^socklen_t   dev2_socklen;$/;"	v
 dev3_socklen	main/main.c	/^socklen_t   dev3_socklen;$/;"	v
 event_handler	main/main.c	/^static esp_err_t event_handler(void *ctx, system_event_t *event)$/;"	f	file:
+gpio_task	main/main.c	/^static void gpio_task(void* arg)$/;"	f	file:
+init_gpio	main/main.c	/^void init_gpio(void)$/;"	f
 init_uart	main/main.c	/^void init_uart()		\/\/ uart init function$/;"	f
 ip_protocol	main/main.c	/^int ip_protocol;$/;"	v
 rs422_to_udp_task	main/main.c	/^static void rs422_to_udp_task(void *pvParameters)$/;"	f	file:

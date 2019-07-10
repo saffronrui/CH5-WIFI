@@ -30,6 +30,10 @@ Function:
 
 #define PORT CONFIG_EXAMPLE_PORT
 
+#define GPIO_OUTPUT_IO_0     32                         //LED_Indicator
+#define GPIO_OUTPUT_PIN_SEL  (1ULL<<GPIO_OUTPUT_IO_0)
+int led_state   = 0;
+
 //#define RS422_COM   UART_NUM_2        // UART2 CAN WORK Normally By Remap Pin to GPIO_NUM_12 and GPIO_NUM_13
 #define RS422_COM   UART_NUM_1
 
@@ -83,11 +87,17 @@ static esp_err_t event_handler(void *ctx, system_event_t *event)
 {
     switch(event->event_id) {
     case SYSTEM_EVENT_AP_STACONNECTED:
+
+        led_state = 1;              //set LED _STATE
+
         ESP_LOGI(TAG, "station:"MACSTR" join, AID=%d",
                  MAC2STR(event->event_info.sta_connected.mac),
                  event->event_info.sta_connected.aid);
         break;
     case SYSTEM_EVENT_AP_STADISCONNECTED:
+
+        led_state = 0;             //set LED_STATE
+
         ESP_LOGI(TAG, "station:"MACSTR"leave, AID=%d",
                  MAC2STR(event->event_info.sta_disconnected.mac),
                  event->event_info.sta_disconnected.aid);
@@ -194,6 +204,29 @@ static void udp_to_rs422_task(void *pvParameters)
     vTaskDelete(NULL);
 }
 
+
+static void gpio_task(void* arg)
+{
+    static int cnt = 0;
+    int time_pra = 1;
+    
+    for(;;) {
+            switch(led_state)
+            {
+                case 0: 
+                        time_pra = 1;   break;
+                case 1:
+                        time_pra = 5;   break;
+            }
+            printf("led_blink!\n");
+            cnt++;
+            gpio_set_level(GPIO_OUTPUT_IO_0, cnt % 2);
+
+            vTaskDelay(200 * time_pra / portTICK_RATE_MS);
+    }
+}
+
+
 void init_uart()		// uart init function
 {
 
@@ -267,9 +300,28 @@ void socket_connect(void)
         ESP_LOGI(TAG, "Socket binded success!");
 }
 
+void init_gpio(void)        //LED_INIT_FUNCTION
+{
+     gpio_config_t io_conf;
+    //disable interrupt
+    io_conf.intr_type = GPIO_PIN_INTR_DISABLE;
+    //set as output mode
+    io_conf.mode = GPIO_MODE_OUTPUT;
+    //bit mask of the pins that you want to set,e.g.GPIO18
+    io_conf.pin_bit_mask = GPIO_OUTPUT_PIN_SEL;
+    //disable pull-down mode
+    io_conf.pull_down_en = 0;
+    //disable pull-up mode
+    io_conf.pull_up_en = 0;
+    //configure GPIO with the given settings
+    gpio_config(&io_conf);
+
+}
+
 void app_main()
 {
     ESP_ERROR_CHECK( nvs_flash_init() );	//Init the device
+    init_gpio();
     init_uart();
     wifi_init_softap();
 
@@ -277,4 +329,5 @@ void app_main()
 
     xTaskCreate(rs422_to_udp_task, "rs422_to_udp", 4096, NULL, 5, NULL);
     xTaskCreate(udp_to_rs422_task, "udp_to_rs422", 4096, NULL, 6, NULL);
+    xTaskCreate(gpio_task, "gpio_task", 2048, NULL, 4, NULL);               //LED Task
 }
